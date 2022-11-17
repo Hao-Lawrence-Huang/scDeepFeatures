@@ -1,1 +1,3 @@
-# DL_feature
+# Deep learning-based feature selection for single-cell RNA sequencing data analysis
+
+## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
