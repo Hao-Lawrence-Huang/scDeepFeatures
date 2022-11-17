@@ -1,0 +1,248 @@
+---
+title: "subsampling"
+author: "Hao Huang"
+date: '2022-05-26'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load
+```{r}
+suppressPackageStartupMessages({
+  #library(splatter)
+  library(scater)
+  library(scran)
+  library(SingleCellExperiment)
+  library(glue)
+})
+```
+
+# Load dataset and further filter
+- starts from rawcount
+```{r}
+sce=readRDS("./Processed/Tabula_sapiens/FS/sce_TS_FAC_processed_no_logcount.rds")
+sce$celltype = as.character(sce$cell_ontology_class)
+```
+
+check the dimension with Lijia's paper
+56119 genes (removed all zero genes) * 27051 cells
+```{r}
+nCellsinEachGroup=data.frame(table(sce$celltype))
+groups=nCellsinEachGroup[nCellsinEachGroup$Freq>=300,]
+celltype=sce$celltype
+names(celltype)=colnames(sce)
+
+# check the filtered dataset, dataset we start our framework from
+sce1 = sce[, sce$celltype %in% groups$Var1]
+dim(sce1)
+groups
+```
+
+# Setting 1: Varying number of cell types 
+```{r}
+## basic filter
+nCellsinEachGroup=data.frame(table(sce$celltype))
+groups=nCellsinEachGroup[nCellsinEachGroup$Freq>=300,]
+celltype=sce$celltype # cell type vector
+names(celltype)=colnames(sce) # cell id vector
+
+n=1 # seed number 
+j=1 # repeat times
+while(j<=10){
+  selectedGroup <- c()
+  to_select = droplevels(groups$Var1) 
+  for(nGroups in c(5, 10, 15, 20)){ # cell type number
+    to_select = to_select[! to_select %in% selectedGroup]
+    set.seed(n)
+    addedGroup = sample(to_select, 5)
+    selectedGroup = c(selectedGroup,  as.character(addedGroup) )
+    selectedCells=list() # empty list of selected cell id
+    for(k in 1:length(selectedGroup)){
+      selectedCells[[k]] = list(sample(celltype[celltype%in%selectedGroup[k]],200)) # select cell id
+    }
+    selected=unlist(selectedCells) # read cell types
+    sim = SingleCellExperiment(
+      assays = list(
+        counts =  as.matrix(counts(sce[,names(selected)])) # subsampling by cell id
+      ),
+      colData = list(
+        cellTypes = selected # record cell types
+      )
+    )
+    
+    sim = scater::logNormCounts(sim)
+    cat(paste0("running...nGroups=", nGroups, "...iteration:", j,"\n"))
+    # i=paste0(selectedGroup,collapse = "; ")
+    # cellTypes = sim$cellTypes
+    # saveRDS(sim,file=paste0("../out/simulation/nGroups/nCells_200_nGroups_",nGroups,"_iteration_",j,"_seeds_",n,".rds")) 
+    ## save 
+    
+    saveRDS(sim, file = glue("./Simulation/Tabula_sapiens/Setting1/Simulation_setting1_nCells_200_nGroups_{nGroups}__iteration{j}_seeds{n}.rds"))
+    n=n+1
+
+    
+    
+  }
+  j=j+1
+}
+```
+
+# Setting 2: Varying cell numbers 
+```{r}
+nCellsinEachGroup=data.frame(table(sce$celltype))
+groups=nCellsinEachGroup[nCellsinEachGroup$Freq>=300,]
+celltype=sce$celltype # cell type vector
+names(celltype)=colnames(sce) # cell id vector
+
+
+n=1
+j=1
+while(j<=10){
+  selectedGroup <- c()
+  to_select = droplevels(groups$Var1) 
+  for(nGroups in c(10,20)){ # cell type number
+    to_select = to_select[! to_select %in% selectedGroup]
+    set.seed(n)
+    addedGroup = sample(to_select, 10)
+    selectedGroup = c(selectedGroup,  as.character(addedGroup)) 
+    for (nCells in seq(50,250,50)){
+      selectedCells=list() # empty list of selected cell id
+      for(k in 1:length(selectedGroup)){
+        selectedCells[[k]] = list(sample(celltype[celltype%in%selectedGroup[k]],nCells))
+      }
+      selected=unlist(selectedCells)
+      sim = SingleCellExperiment(
+        assays = list(
+          counts =  as.matrix(counts(sce[,names(selected)]))
+        ),
+        colData = list(
+          cellTypes = selected
+        )
+      )
+      
+      sim = scater::logNormCounts(sim)
+      cat(paste0("running...nGroups=", nGroups,"...nCells=", nCells,"...iteration:", j,"\n"))
+      # i=paste0(selectedGroup,collapse = "; ")
+      # cellTypes = sim$cellTypes
+      # saveRDS(sim,file=paste0("../out/simulation/nCells/nCells_",nCells,"_nGroups_",nGroups,"_iteration_",j,"_seeds_",n,".rds"))
+      
+      ## save
+      dir.create(glue("./Simulation/Tabula_sapiens//Setting2/nGroups_{nGroups}"), showWarnings = FALSE)
+      dir.create(glue("./Simulation/Tabula_sapiens/Setting2/nGroups_{nGroups}/nCells_{nCells}"), showWarnings = FALSE)
+      saveRDS(sim, file = glue("./Simulation/Tabula_sapiens/Setting2/nGroups_{nGroups}/nCells_{nCells}/Simulation_setting2_nGroups_{nGroups}_nCells_{nCells}_iteration{j}.rds"))
+    }
+    n=n+1
+    }
+  j=j+1
+  }
+```
+
+# Setting 3: Varying the imabalance ratio
+```{r}
+nCellsinEachGroup=data.frame(table(sce$celltype))
+groups=nCellsinEachGroup[nCellsinEachGroup$Freq>=300,]
+celltype=sce$celltype # cell type vector
+names(celltype)=colnames(sce) # cell id vector
+
+# cellratio=list(c(200,200,200,10,10),c(200,200,200,20,20),c(200,200,200,40,40),c(200,200,200,100,100))
+n=1
+nCells = 200
+j = 1
+while(j<=10){
+  selectedGroup_major <- c()
+  selectedGroup_minor <- c()
+  to_select = droplevels(groups$Var1) 
+  for(nGroups in c(10,20)){#seq(5,20,5)
+    set.seed(n)
+    selectedGroup_major = c(selectedGroup_major, as.character(sample(to_select, 5)))
+    to_select = to_select[! to_select %in% selectedGroup_major]
+    selectedGroup_minor = c(selectedGroup_minor, as.character(sample(to_select, 5)))
+    to_select = to_select[! to_select %in% selectedGroup_minor]
+    
+    for (imbratio in c(1/2, 1/4, 1/10)){
+      selectedCells_major=list() # empty list of selected cell id
+      for(k in 1:length(selectedGroup_major)){
+        selectedCells_major[[k]] = list(sample(celltype[celltype%in%selectedGroup_major[k]],nCells))
+      }
+      
+      selectedCells_minor=list() # empty list of selected cell id
+      for(k in 1:length(selectedGroup_minor)){
+        selectedCells_minor[[k]] = list(sample(celltype[celltype%in%selectedGroup_minor[k]],nCells*imbratio))
+      }
+      
+      selected=c(unlist(selectedCells_major), unlist(selectedCells_minor))
+      sim = SingleCellExperiment(
+        assays = list(
+          counts =  as.matrix(counts(sce[,names(selected)]))
+        ),
+        colData = list(
+          cellTypes = selected
+        )
+      )
+      
+      sim = scater::logNormCounts(sim)
+      cat(paste0("running...nGroups=", nGroups,"...nCells=", paste0(nCells,collapse = ":"),"...iteration:", j,"\n"))
+  
+      ## save
+      dir.create(glue("./Simulation/Tabula_sapiens//Setting3/nGroups_{nGroups}"), showWarnings = FALSE)
+      dir.create(glue("./Simulation/Tabula_sapiens//Setting3/nGroups_{nGroups}/imbratio_{imbratio}"), showWarnings = FALSE)
+      #print(table(sim$cellTypes))
+      saveRDS(sim, file = glue("./Simulation/Tabula_sapiens//Setting3/nGroups_{nGroups}/imbratio_{imbratio}/Simulation_setting3_nCellsMajor_200_nGroups_{nGroups}_iteration{j}_imbalanceRatio_1_{imbratio}.rds"))
+    }
+    n=n+1
+  }
+  j=j+1
+}
+```
+
+# Setting 4：Datasets for reproducibility checking - 10 cell type
+```{r}
+nCellsinEachGroup=data.frame(table(sce$celltype))
+groups=nCellsinEachGroup[nCellsinEachGroup$Freq>=300,]
+celltype=sce$celltype # cell type vector
+names(celltype)=colnames(sce) # cell id vector
+
+
+n=1 # seed number 
+j=1 # iteration number 
+selectedGroup <- c()
+to_select = droplevels(groups$Var1)
+set.seed(n)
+nGroups=10
+addedGroup = sample(to_select, nGroups)
+selectedGroup = c(selectedGroup,  as.character(addedGroup))
+nCells=200
+while(j<=10){
+  selectedCells=list() # empty list of selected cell id
+  for(k in 1:length(selectedGroup)){
+    selectedCells[[k]] = list(sample(celltype[celltype%in%selectedGroup[k]],nCells))
+  }
+  selected=unlist(selectedCells)
+  sim = SingleCellExperiment(
+    assays = list(
+      counts =  as.matrix(counts(sce[,names(selected)]))
+    ),
+    colData = list(
+      cellTypes = selected
+    )
+  )
+  
+  sim = scater::logNormCounts(sim)
+  cat(paste0("running...nGroups=", nGroups,"...nCells=", nCells,"...iteration:", j,"\n"))
+  ## save
+  dir.create(glue("./Simulation/Tabula_sapiens//Setting4"), showWarnings = FALSE)
+  saveRDS(sim, file = glue("./Simulation/Tabula_sapiens//Setting4/Simulation_setting4_seed_{n}_iteration{j}.rds"))
+  j=j+1
+  }
+```
+
+
+
+
+```{r}
+sessionInfo()
+```
+

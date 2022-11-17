@@ -1,0 +1,81 @@
+---
+title: "tabula muris subsampling"
+output: html_document
+date: '2022-05-26'
+author: Hao Huang
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load packages - done
+```{r}
+suppressPackageStartupMessages({
+  library(readr)
+  library(SingleCellExperiment)
+  library(scater)
+  library(dplyr)
+  library(tidyverse)
+  library(Seurat)
+  #library(SCnorm)
+  library(Matrix)
+})
+```
+
+# Load or download data
+1. original data downloaded from: https://figshare.com/articles/dataset/Single-cell_RNA-seq_data_from_Smart-seq2_sequencing_of_FACS_sorted_cells_v2_/5829687
+version 8 
+2. unzip in folder
+```{r}
+f = list.files(path="./Original/Tabula_muris/FS/FACS/", full.names = TRUE)
+mat <- lapply(f, function(x) read.csv(x, row.names = 1, header=TRUE)) %>% bind_cols
+
+annot <- read.csv("./Original/Tabula_muris/FS/annotations_facs.csv", header=TRUE)
+mat <- mat[, annot$cell]
+mat = as(as.matrix(mat), "dgCMatrix")
+
+# create sce object
+sce <- SingleCellExperiment(assays=list(counts=mat),
+                            colData=annot)
+
+# uppercase rownames
+rownames(sce) = toupper(rownames(sce))
+
+# save tissue cell
+sce$tissue_cell = as.factor(paste(sce$tissue, sce$cell_ontology_class, sep="_"))
+saveRDS(sce, file = "./Processed/Tabula_muris/FS/sce_TM_FAC_raw_HH.rds")
+```
+
+
+# filtered raw 
+```{r}
+## remove empty cells and no expressed genes
+sce = readRDS("./Processed/Tabula_muris/FS/sce_TM_FAC_raw_HH.rds")
+sce <- sce[rowSums(counts(sce)) > 0, ]
+sce <- sce[, colSums(counts(sce)) > 0]
+dim(sce)
+```
+
+
+```{r}
+sce
+```
+
+## Calculate metrics
+```{r}
+sce$nReads = colSums(counts(sce))
+sce$nGene = colSums(counts(sce) > 0)
+```
+
+# save
+```{r}
+saveRDS(sce, file = "./Processed/Tabula_muris/FS/sce_TM_FAC_processed_HH_no_logcount.rds")
+```
+
+
+# Session Info
+```{r}
+sessioninfo::session_info()
+```
+

@@ -1,0 +1,93 @@
+---
+title: "tabula sapiens subsampling"
+output: html_document
+date: '2022-05-26'
+author: Hao Huang
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load packages - done
+```{r}
+suppressPackageStartupMessages({
+  library(readr)
+  library(SingleCellExperiment)
+  library(scater)
+  library(dplyr)
+  library(tidyverse)
+  library(Seurat)
+  #library(SCnorm)
+  library(Matrix)
+  library(SeuratDisk)
+})
+
+suppressPackageStartupMessages(library(anndata))  
+```
+
+# Load or download data
+1. original data downloaded from: https://figshare.com/articles/dataset/Tabula_Sapiens_release_1_0/14267219
+2. unzip in folder
+
+## load raw count data - process to FS (smartseq2) protocol
+```{r}
+ad = read_h5ad("../Data/Original/Tabula_sapiens/TabulaSapiens.h5ad")
+```
+
+```{r}
+# extract raw matrix
+idx = which(ad$obs[,2] == "smartseq2")
+mat <- ad$raw[idx, ]
+mat = as(as.matrix(mat), "dgCMatrix")
+mat_norm <- ad$X[idx, ]
+meta <- ad$obs[idx, ]
+rowdata <- ad$var
+
+mat.T <- t(mat)
+sce <- SingleCellExperiment(list(counts=mat.T),
+    colData = meta,
+    rowData = rowdata
+)
+
+# uppercase rownames
+rownames(sce) = toupper(rownames(sce))
+```
+
+
+
+```{r}
+# save
+saveRDS(sce, file = "../Data/Processed/Tabula_sapiens/FS/sce_TS_FAC_raw.rds")
+```
+
+
+
+# load FS raw data
+```{r}
+sce = readRDS("../Data/Processed/Tabula_sapiens/FS/sce_TS_FAC_raw.rds")
+```
+
+# basic filtering
+```{r}
+sce <- sce[rowSums(counts(sce)) > 0, ]
+sce <- sce[, colSums(counts(sce)) > 0]
+dim(sce)
+```
+
+## Calculate metrics
+```{r}
+sce$nReads = colSums(counts(sce))
+sce$nGene = colSums(counts(sce) > 0)
+```
+
+# save
+```{r}
+saveRDS(sce, file = "./Processed/Tabula_sapiens//FS/sce_TS_FAC_processed_no_logcount.rds")
+```
+
+
+# Session Info
+```{r}
+sessioninfo::session_info()
+```

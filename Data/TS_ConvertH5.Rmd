@@ -1,0 +1,254 @@
+---
+title: "covert sce to h5"
+author: "Hao Huang"
+date: '2022-06-27'
+output: html_document
+---
+
+Convet the simulated datasets to h5 format
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load
+```{r}
+suppressPackageStartupMessages({
+  library(SingleCellExperiment)
+  library(glue)
+  source("../Utils/utils.R")
+})
+```
+
+# Convert setting 1
+```{r}
+n=1 # seed number 
+j=1 # repeat times
+while(j<=10){
+  for(nGroups in c(5, 10, 15, 20)){ # cell type number
+    cat(paste0("converting...nGroups=", nGroups, "...iteration:", j,"\n"))
+    # read simulated data
+    sce = readRDS(glue("./Simulation/Tabula_sapiens//Setting1/Simulation_setting1_nCells_200_nGroups_{nGroups}__iteration{j}_seeds{n}.rds"))
+    res.split <- train_test_split(rna = sce, cty = sce$cellTypes, seedInput = 1234)
+    train.rna = res.split$train.rna
+    train.cty = res.split$train.cty
+    test.rna = res.split$test.rna
+    test.cty = res.split$test.cty
+    
+    ## filter lowly expressed genes, if it express less than 1% in within every cell types 
+    exprsMat <- logcounts(train.rna)
+    exprs_pct <- 0.01
+    
+    label = train.rna$cellTypes
+    cts = unique(train.rna$cellTypes)
+    
+    meanPct.list <- list()
+    for(i in 1:length(cts)) {
+      idx <- which(label == cts[i])
+      meanPct.list[[i]] <- (Matrix::rowSums(exprsMat[, idx, drop = FALSE] > 0)/sum(label == cts[i])) > exprs_pct
+    }
+    names(meanPct.list) <- cts
+    keep = rowSums(do.call(cbind, meanPct.list)) > 0 # remove any genes that are expressed lower than 5% in each and every cell type
+    
+    train.rna = train.rna[keep, ]
+    ###
+    
+    train.exprsmat = as.matrix(logcounts(train.rna))
+    write_h5_DL(exprs_list = list(rna = train.exprsmat),
+                     h5file_list = c(glue("./Simulation/Tabula_sapiens_h5//Setting1/Train_Simulation_setting1_nCells_200_nGroups_{nGroups}__iteration{j}_seeds{n}.h5"))
+                     )
+    
+    write_csv_DL(cellType_list =  list(rna = train.cty),
+                   csv_list = c(glue("./Simulation/Tabula_sapiens_h5//Setting1/Train_Cty_Simulation_setting1_nCells_200_nGroups_{nGroups}__iteration{j}_seeds{n}.csv")))
+    
+    test.exprsmat = as.matrix(logcounts(test.rna))
+    write_h5_DL(exprs_list = list(rna = test.exprsmat),
+                     h5file_list = c(glue("./Simulation/Tabula_sapiens_h5//Setting1/Test_Simulation_setting1_nCells_200_nGroups_{nGroups}__iteration{j}_seeds{n}.h5"))
+                     )
+    
+    write_csv_DL(cellType_list =  list(rna = test.cty),
+                   csv_list = c(glue("./Simulation/Tabula_sapiens_h5//Setting1/Test_Cty_Simulation_setting1_nCells_200_nGroups_{nGroups}__iteration{j}_seeds{n}.csv")))
+    n=n+1
+    
+  }
+  j=j+1
+}
+```
+
+# Convert setting 2
+```{r}
+n=1
+j = 1
+while(j<=10){
+  for(nGroups in c(10,20)){#seq(5,20,5)
+    for (nCells in seq(50,250,50)){
+      cat(paste0("converting...nGroups=", nGroups,"...nCells=", paste0(nCells,collapse = ":"),"...iteration:", j,"\n"))
+      sce = readRDS(glue("./Simulation/Tabula_sapiens//Setting2/nGroups_{nGroups}/nCells_{nCells}/Simulation_setting2_nGroups_{nGroups}_nCells_{nCells}_iteration{j}.rds"))
+      
+      res.split <- train_test_split(rna = sce, cty = sce$cellTypes, seedInput = 1234)
+      train.rna = res.split$train.rna
+      train.cty = res.split$train.cty
+      test.rna = res.split$test.rna
+      test.cty = res.split$test.cty
+      
+      ## filter lowly expressed genes, if it express less than 1% in within every cell types 
+      exprsMat <- logcounts(train.rna)
+      exprs_pct <- 0.01
+      
+      label = train.rna$cellTypes
+      cts = unique(train.rna$cellTypes)
+      
+      print(all(train.cty == label))
+      meanPct.list <- list()
+      for(i in 1:length(cts)) {
+        idx <- which(label == cts[i])
+        meanPct.list[[i]] <- (Matrix::rowSums(exprsMat[, idx, drop = FALSE] > 0)/sum(label == cts[i])) > exprs_pct
+      }
+      names(meanPct.list) <- cts
+      keep = rowSums(do.call(cbind, meanPct.list)) > 0 # remove any genes that are expressed lower than 5% in each and every cell type
+      
+      train.rna = train.rna[keep, ]
+      ###
+        
+      dir.create(glue("./Simulation/Tabula_sapiens_h5/Setting2/nGroups_{nGroups}"), showWarnings = FALSE)  
+      dir.create(glue("./Simulation/Tabula_sapiens_h5/Setting2/nGroups_{nGroups}/nCells_{nCells}"), showWarnings = FALSE) 
+      ###
+      train.exprsmat = as.matrix(logcounts(train.rna))
+      write_h5_DL(exprs_list = list(rna = train.exprsmat),
+                     h5file_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting2/nGroups_{nGroups}/nCells_{nCells}/Train_Simulation_setting2_nGroups_{nGroups}_nCells_{nCells}_iteration{j}.h5"))
+                     )
+      
+      write_csv_DL(cellType_list =  list(rna = train.cty),
+                   csv_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting2/nGroups_{nGroups}/nCells_{nCells}/Train_Cty_Simulation_setting2_nGroups_{nGroups}_nCells_{nCells}_iteration{j}.csv")))
+      
+      
+      test.exprsmat = as.matrix(logcounts(test.rna))
+      write_h5_DL(exprs_list = list(rna = test.exprsmat),
+                       h5file_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting2/nGroups_{nGroups}/nCells_{nCells}/Test_Simulation_setting2_nGroups_{nGroups}_nCells_{nCells}_iteration{j}.h5"))
+                       )
+      
+      write_csv_DL(cellType_list =  list(rna = test.cty),
+                     csv_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting2/nGroups_{nGroups}/nCells_{nCells}/Test_Cty_Simulation_setting2_nGroups_{nGroups}_nCells_{nCells}_iteration{j}.csv")))
+    }
+    n=n+1
+  }
+  j=j+1
+}
+```
+
+
+# Convert setting 3 
+```{r}
+n=1
+nCells = 200
+j = 1
+while(j<=10){
+  for(nGroups in c(10,20)){#seq(5,20,5)
+    for (imbratio in c(1/2, 1/4, 1/10)){
+      cat(paste0("converting...nGroups=", nGroups,"...nCells=", paste0(nCells,collapse = ":"),"...iteration:", j,"\n"))
+      sce = readRDS(glue("./Simulation/Tabula_sapiens/Setting3/nGroups_{nGroups}/imbratio_{imbratio}/Simulation_setting3_nCellsMajor_200_nGroups_{nGroups}_iteration{j}_imbalanceRatio_1_{imbratio}.rds"))
+      
+      res.split <- train_test_split(rna = sce, cty = sce$cellTypes, seedInput = 1234)
+      train.rna = res.split$train.rna
+      train.cty = res.split$train.cty
+      test.rna = res.split$test.rna
+      test.cty = res.split$test.cty
+      
+      ## filter lowly expressed genes, if it express less than 1% in within every cell types 
+      exprsMat <- logcounts(train.rna)
+      exprs_pct <- 0.01
+      
+      label = train.rna$cellTypes
+      cts = unique(train.rna$cellTypes)
+      
+      meanPct.list <- list()
+      for(i in 1:length(cts)) {
+        idx <- which(label == cts[i])
+        meanPct.list[[i]] <- (Matrix::rowSums(exprsMat[, idx, drop = FALSE] > 0)/sum(label == cts[i])) > exprs_pct
+      }
+      names(meanPct.list) <- cts
+      keep = rowSums(do.call(cbind, meanPct.list)) > 0 # remove any genes that are expressed lower than 5% in each and every cell type
+      
+      train.rna = train.rna[keep, ]
+      ###
+        
+      dir.create(glue("./Simulation/Tabula_sapiens_h5/Setting3/nGroups_{nGroups}"), showWarnings = FALSE)  
+      dir.create(glue("./Simulation/Tabula_sapiens_h5/Setting3/nGroups_{nGroups}/imbratio_{imbratio}"), showWarnings = FALSE) 
+      ###
+      train.exprsmat = as.matrix(logcounts(train.rna))
+      write_h5_DL(exprs_list = list(rna = train.exprsmat),
+                     h5file_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting3/nGroups_{nGroups}/imbratio_{imbratio}/Train_Simulation_setting3_nCellsMajor_200_nGroups_{nGroups}_iteration{j}_imbalanceRatio_1_{imbratio}.h5"))
+                     )
+      
+      write_csv_DL(cellType_list =  list(rna = train.cty),
+                   csv_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting3/nGroups_{nGroups}/imbratio_{imbratio}/Train_Cty_Simulation_setting3_nCellsMajor_200_nGroups_{nGroups}_iteration{j}_imbalanceRatio_1_{imbratio}.csv")))
+      
+      
+      test.exprsmat = as.matrix(logcounts(test.rna))
+      write_h5_DL(exprs_list = list(rna = test.exprsmat),
+                       h5file_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting3/nGroups_{nGroups}/imbratio_{imbratio}/Test_Simulation_setting3_nCellsMajor_200_nGroups_{nGroups}_iteration{j}_imbalanceRatio_1_{imbratio}.h5"))
+                       )
+      
+      write_csv_DL(cellType_list =  list(rna = test.cty),
+                     csv_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting3/nGroups_{nGroups}/imbratio_{imbratio}/Test_Cty_Simulation_setting3_nCellsMajor_200_nGroups_{nGroups}_iteration{j}_imbalanceRatio_1_{imbratio}.csv")))
+    }
+    n=n+1
+  }
+  j=j+1
+}
+```
+
+# Convert Setting 4 10 cell type - no filtering on genes
+```{r}
+n=1
+nCells = 200
+nGroups =10
+j = 1
+while(j<=10){
+      cat(paste0("converting...nGroups=", nGroups,"...nCells=", paste0(nCells,collapse = ":"),"...iteration:", j,"\n"))
+      sce = readRDS(glue("./Simulation/Tabula_sapiens//Setting4/Simulation_setting4_seed_{n}_iteration{j}.rds"))
+      #print(names(table(sce$cellTypes)))
+      res.split <- train_test_split(rna = sce, cty = sce$cellTypes, seedInput = 1234)
+      train.rna = res.split$train.rna
+      train.cty = res.split$train.cty
+      test.rna = res.split$test.rna
+      test.cty = res.split$test.cty
+      
+      ## filter lowly expressed genes, if it express less than 1% in within every cell types 
+      # exprsMat <- logcounts(train.rna)
+      # exprs_pct <- 0.01
+      # 
+      # label = train.rna$cellTypes
+      # cts = unique(train.rna$cellTypes)
+      # 
+      # meanPct.list <- list()
+      # for(i in 1:length(cts)) {
+      #   idx <- which(label == cts[i])
+      #   meanPct.list[[i]] <- (Matrix::rowSums(exprsMat[, idx, drop = FALSE] > 0)/sum(label == cts[i])) > exprs_pct
+      # }
+      # names(meanPct.list) <- cts
+      # keep = rowSums(do.call(cbind, meanPct.list)) > 0 # remove any genes that are expressed lower than 5% in each and every cell type
+      # 
+      # train.rna = train.rna[keep, ]
+      ###
+        
+      dir.create(glue("./Simulation/Tabula_sapiens_h5//Setting4"), showWarnings = FALSE)
+      ###
+      train.exprsmat = as.matrix(logcounts(train.rna))
+      write_h5_DL(exprs_list = list(rna = train.exprsmat),
+                     h5file_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting4/Train_Simulation_setting4_seed_{n}_iteration_{j}_all.h5"))
+                     )
+      
+      write_csv_DL(cellType_list =  list(rna = train.cty),
+                   csv_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting4/Train_Cty_Simulation_setting4_seed_{n}_iteration_{j}_all.csv")))
+      
+      
+      test.exprsmat = as.matrix(logcounts(test.rna))
+      write_h5_DL(exprs_list = list(rna = test.exprsmat),
+                       h5file_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting4/Test_Simulation_setting4_seed_{n}_iteration_{j}_all.h5"))
+                       )
+      
+      write_csv_DL(cellType_list =  list(rna = test.cty),
+                     csv_list = c(glue("./Simulation/Tabula_sapiens_h5/Setting4/Test_Cty_Simulation_setting4_seed_{n}_iteration_{j}_all.csv")))
+  j=j+1
+}
+```
