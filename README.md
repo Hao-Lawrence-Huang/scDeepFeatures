@@ -52,20 +52,19 @@ python main.py --method [method] --train_data [path to training data]  --train_l
 python main.py --method DeepLift  --train_data ../../../Data/Example_dataset/data.h5 --train_label ../../../Data/Example_dataset/label.csv --test_data ../../../Data/Example_dataset/data.h5 --test_label ../../../Data/Example_dataset/label.csv --save_fs_eachcell ../../../Data/Example_dataset/
 ```
 ### Argument
-Training dataset information
-+ `--rna`: path to training data RNA modality.
-+ `--adt`: path to training data ADT modality (can be null if ATAC is provided).
-+ `--atac`: path to training data ATAC modality (can be null if ADT is provided). Note ATAC data should be summarised to the gene level as "gene activity score".
-+ `--cty`: path to the labels of training data.
++ `--method`: Method name of Deep learning-based feature selection (i.e. DeepLift, GradientShap, LRP, FeatureAblation, Occlusion, Lime)
++ `--train_data`: path to training scRNA-seq data (h5 file)
++ `--train_label`: path to training scRNA-seq label (csv file)
++ `--test_data`: same as train data
++ `--test_label`: same as train label
++ `--only_pos`: whether to select only up-regulated genes
++ `--save_fs_eachcell`: path to save the feature selection results
 
 Training and model config
 + `--batch_size`: Batch size (set as 64 by default)
-+ `--epochs`: Number of epochs.
++ `--epochs`: Number of epochs (set as 20 by default)
 + `--lr`: Learning rate.
-+ `--z_dim`: Dimension of latent space.
-+ `--hidden_rna`: Dimension of RNA branch.
-+ `--hidden_adt`: Dimension of ADT branch.
-+ `--hidden_atac`: Dimension of ATAC branch.
+
 
 Other config
 + `--seed`: The random seed for training.
