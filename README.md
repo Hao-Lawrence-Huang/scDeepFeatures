@@ -38,13 +38,16 @@ write_csv_DL(cellType_list =  list(rna = sce$cellTypes),
 Without downloading all the datasets we sampled (see link provided below), one can use the example dataset saved in `Data/Example_dataset`
 Training and testing on demo dataset will cost no more than 1 minute with GeForce RTX 3090 GPU.
 
-## Running Matilda with the example dataset
-### Training the Matilda model (see Arguments section for more details).
+## Running Deep learning-based feature selection with the example dataset
+### Training the MLP model and perform feature selection
 ```
-cd Matilda
-cd main
-# training the matilda model
+cd Utils
+cd Feature_selection_methods
+cd Mlp
+
+# training and perform feature selection for scRNA-seq 
 python main_matilda_train.py --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] #[training dataset]
+python main.py --method [method] --train_data [path to training data]  --train_label [path to training label] --test_data [path to test data]                           --test_label [path to test label] --save_fs_eachcell [path to save feature selection results]
 # Example run
 python main_matilda_train.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv
 ```
