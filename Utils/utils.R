@@ -30,8 +30,7 @@ train_test_split <- function(rna, cty, seedInput = 1234){
 }
 
 
-# convert data to h5 format, adapt from scJoint
-#' This function will generate h5 files for a list expression matrices as input of process_db.py file
+
 #' 
 #' @param exprs_list a list of expression matrices
 #' @param h5file_list a vector indictates the the h5 file names to output, corresponding to the expression matrix
@@ -60,7 +59,7 @@ write_h5_DL <- function(exprs_list, h5file_list) {
   
 }
 
-#' This function will generate csv files for a list of cell types as input of process_db.py file
+
 #' 
 #' @param cellType_list a list of cell types
 #' @param csv_list a vector indictates the the csv file names to output, corresponding to the cell type list
