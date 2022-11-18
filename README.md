@@ -7,6 +7,9 @@ In this work, we explore the utility of various deep learning-based feature sele
 ## Installation:
 DL feature selection for scRNA-seq is developed using PyTorch 1.11.0 and Captum 0.5.0 and requires >=1 GPU to run. We recommend using conda enviroment to install and run the framework. We assume conda is installed. You can use the provided environment or install the environment by yourself accoring to your hardware settings. Note the following installation code snippets were tested on a Windows system (Win10 professional) with NVIDIA GeForce 3090 GPU. The installation process needs about 15 minutes.
 
-## Subsampled data download link:
+### edit later: ## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
 
-## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
+## Data sampling for different data characteristics
+### Sampled datasets download link:
+
+
