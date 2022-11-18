@@ -15,11 +15,25 @@ conda activate DL_feature_selection
 ```
 
 Step 2:
-Otain DL_feature_selection by clonning the github repository:
+Obtain DL_feature_selection by clonning the github repository:
 ```
 git clone https://github.com/HaoHuang-USYD/DL_feature_selection.git
 ```
 
+## Preparing intput
+The main function takes expression data (i.e. RNA) in `.h5` format and cell type labels in `.csv` format, with log-normalised count data. 
+An example for creating .h5 file with Utils/utils.R from a singlecellexperiment object in the R environment is as below:
+```
+source("utils.R")
+
+# singlecellexperiment object (sce) with cellTypes as cell type information
+train.exprsmat = as.matrix(logcounts(sce))
+write_h5_DL(exprs_list = list(rna = train.exprsmat),
+                 h5file_list = c("data.h5"))
+                 )
+write_csv_DL(cellType_list =  list(rna = sce$cellTypes),
+               csv_list = c("label.csv")))
+```
 
 ### edit later: ## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
 
