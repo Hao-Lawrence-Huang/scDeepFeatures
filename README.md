@@ -35,7 +35,7 @@ write_csv_DL(cellType_list =  list(rna = sce$cellTypes),
 ```
 
 ### Example dataset
-Without downloading all the datasets we sampled (see link provided below), one can use the example dataset saved in "Data/Example_dataset"
+Without downloading all the datasets we sampled (see link provided below), one can use the example dataset saved in `Data/Example_dataset`
 Training and testing on demo dataset will cost no more than 1 minute with GeForce RTX 3090 GPU.
 
 ### edit later: ## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
