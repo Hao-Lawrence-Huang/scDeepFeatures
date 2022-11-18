@@ -1,1 +1,1 @@
-This is a example data
+This is the example data
