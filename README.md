@@ -39,7 +39,7 @@ write_csv_DL(cellType_list =  list(rna = sce$cellTypes),
 Without downloading all the datasets we sampled (see link provided below), one can use the example dataset saved in `Data/Example_dataset`
 Training and testing on demo dataset will cost no more than 1 minute with GeForce RTX 3090 GPU.
 
-## Running Deep learning-based feature selection with the example dataset
+## Running deep learning-based feature selection with the example dataset
 ### Training the MLP model and perform feature selection
 ```
 cd Utils
