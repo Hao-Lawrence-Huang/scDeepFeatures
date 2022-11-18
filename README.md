@@ -86,3 +86,4 @@ Please use the link provided above for feature selection results
 
 ## Scripts for analysing feature selection results
 Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`, `Main/TS_RunEvaluation` and `Main/Combine_Evaluation`.
+The scripts should only run after downloading all the sampled datasets and feature selection results.
