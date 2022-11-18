@@ -73,9 +73,10 @@ Other config
 + `--augmentation`: Whether to augment simulated data.
 
 
-## Data sampling for different data characteristics (i.e. Varying number of cell types, varying number of cells, varying imbalacne ratio between major and minor cell types)
+## Data sampling for different data characteristics 
 ### Sampled datasets download link: (Uploading to cloud)
 Please use the link provided above for full datasets sampled (over 50 Gb)
+Data characteristics were generated with the following 3 settings: varying number of cell types, varying number of cells, varying imbalacne ratio between major and minor cell types.
 
 ## Feature selection results
 ### Download link: (Uploading to cloud)
