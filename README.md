@@ -70,9 +70,9 @@ Other config
 + `--seed`: The random seed for training.
 + `--augmentation`: Whether to augment simulated data.
 
-### edit later: ## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
 
 ## Data sampling for different data characteristics
-### Sampled datasets download link:
+### Sampled datasets download link: 
+Please use the link provided above for full datasets sampled
 
 
