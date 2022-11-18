@@ -26,7 +26,7 @@ An example for creating .h5 file with Utils/utils.R from a singlecellexperiment 
 ```
 source("utils.R")
 
-# singlecellexperiment object (sce) with cellTypes as cell type information
+# singlecellexperiment object (sce) with cellTypes as cell type annotation
 train.exprsmat = as.matrix(logcounts(sce))
 write_h5_DL(exprs_list = list(rna = train.exprsmat),
                  h5file_list = c("data.h5")))
