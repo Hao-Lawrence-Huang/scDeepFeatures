@@ -47,7 +47,7 @@ cd Mlp
 
 # training and perform feature selection for scRNA-seq 
 # with the interest of feature selection, test data is the same as training data
-python main.py --method [method] --train_data [path to training data]  --train_label [path to training label] --test_data [path to test data]                           --test_label [path to test label] --save_fs_eachcell [path to save feature selection results]
+python main.py --method [method] --train_data [path to training data]  --train_label [path to training label] --test_data [path to test data] --test_label [path to test label] --save_fs_eachcell [path to save feature selection results]
 # Example run
 python main.py --method DeepLift  --train_data ../../../Data/Example_dataset/data.h5 --train_label ../../../Data/Example_dataset/label.csv --test_data ../../../Data/Example_dataset/data.h5 --test_label ../../../Data/Example_dataset/label.csv --save_fs_eachcell ../../../Data/Example_dataset/
 ```
