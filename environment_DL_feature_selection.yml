@@ -1,4 +1,4 @@
-name: comp5329-a2
+name: DL_feature_selection
 channels:
   - pytorch
   - conda-forge
