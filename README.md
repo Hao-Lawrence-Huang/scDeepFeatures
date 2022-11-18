@@ -14,6 +14,13 @@ conda env create -f environment_DL_feature_selection.yaml
 conda activate DL_feature_selection
 ```
 
+Step 2:
+Otain DL_feature_selection by clonning the github repository:
+```
+git clone https://github.com/HaoHuang-USYD/DL_feature_selection.git
+```
+
+
 ### edit later: ## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
 
 ## Data sampling for different data characteristics
