@@ -82,4 +82,4 @@ Please use the link provided above for full datasets sampled (over 50 Gb)
 Please use the link provided above for feature selection results
 
 ## Scripts for analysing feature selection results
-Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`
+Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`, `Main/TS_RunEvaluation` and `Main/Combine_Evaluation`.
