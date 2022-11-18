@@ -38,6 +38,36 @@ write_csv_DL(cellType_list =  list(rna = sce$cellTypes),
 Without downloading all the datasets we sampled (see link provided below), one can use the example dataset saved in `Data/Example_dataset`
 Training and testing on demo dataset will cost no more than 1 minute with GeForce RTX 3090 GPU.
 
+## Running Matilda with the example dataset
+### Training the Matilda model (see Arguments section for more details).
+```
+cd Matilda
+cd main
+# training the matilda model
+python main_matilda_train.py --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] #[training dataset]
+# Example run
+python main_matilda_train.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv
+```
+### Argument
+Training dataset information
++ `--rna`: path to training data RNA modality.
++ `--adt`: path to training data ADT modality (can be null if ATAC is provided).
++ `--atac`: path to training data ATAC modality (can be null if ADT is provided). Note ATAC data should be summarised to the gene level as "gene activity score".
++ `--cty`: path to the labels of training data.
+
+Training and model config
++ `--batch_size`: Batch size (set as 64 by default)
++ `--epochs`: Number of epochs.
++ `--lr`: Learning rate.
++ `--z_dim`: Dimension of latent space.
++ `--hidden_rna`: Dimension of RNA branch.
++ `--hidden_adt`: Dimension of ADT branch.
++ `--hidden_atac`: Dimension of ATAC branch.
+
+Other config
++ `--seed`: The random seed for training.
++ `--augmentation`: Whether to augment simulated data.
+
 ### edit later: ## Implementation of deep learning-based feature selection methods and notebooks for performing feature selection on sampled datasets are in Utils/Feature_selection_methods/Mlp
 
 ## Data sampling for different data characteristics
