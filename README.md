@@ -29,8 +29,7 @@ source("utils.R")
 # singlecellexperiment object (sce) with cellTypes as cell type information
 train.exprsmat = as.matrix(logcounts(sce))
 write_h5_DL(exprs_list = list(rna = train.exprsmat),
-                 h5file_list = c("data.h5"))
-                 )
+                 h5file_list = c("data.h5")))
 write_csv_DL(cellType_list =  list(rna = sce$cellTypes),
                csv_list = c("label.csv")))
 ```
