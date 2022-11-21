@@ -58,7 +58,7 @@ python main.py --method DeepLift  --train_data ../../../Data/Example_dataset/dat
 + `--train_label`: path to training scRNA-seq label (csv file)
 + `--test_data`: same as train data
 + `--test_label`: same as train label
-+ `--only_pos`: whether to select only up-regulated genes
++ `--only_pos`: whether to select only up-regulated genes, default is "activated" , change to any other string to record the overall gene ranks
 + `--save_fs_eachcell`: path to save the feature selection results
 
 Training and model config
