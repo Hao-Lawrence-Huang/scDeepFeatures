@@ -40,7 +40,7 @@ Without downloading all the datasets we sampled (see link provided below), one c
 Training and testing on demo dataset will cost no more than 1 minute with GeForce RTX 3090 GPU.
 
 ## Running deep learning-based feature selection with the example dataset
-### Training the MLP model and perform feature selection
+### Training the MLP model and performing feature selection
 ```
 cd Utils
 cd Feature_selection_methods
