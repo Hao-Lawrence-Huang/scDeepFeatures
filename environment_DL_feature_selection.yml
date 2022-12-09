@@ -181,4 +181,4 @@ dependencies:
     - tqdm==4.64.0
     - umap-learn==0.5.3
     - yacs==0.1.8
-prefix: E:\Softwares\Anaconda\001\envs\comp5329-a2
+prefix: 
