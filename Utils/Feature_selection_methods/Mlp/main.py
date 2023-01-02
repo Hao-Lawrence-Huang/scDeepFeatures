@@ -24,7 +24,7 @@ import captum
 from captum.attr import *
 import time
 from util import setup_seed, MyDataset, save_checkpoint,AverageMeter,accuracy,ToTensor, read_h5_data, read_fs_label, read_h5_feature, read_ct_name
-from learn import Mlp_baseline, Mlp_baseline_LRP,  Mlp_residual, Mlp_residual_LRP, train_model
+from learn import Mlp_baseline, Mlp_baseline_LRP, train_model
 
 
 
