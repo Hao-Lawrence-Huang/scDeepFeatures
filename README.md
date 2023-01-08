@@ -85,6 +85,7 @@ OR use the files in data folder to generate sampled datasets.
 ### Download link: (Uploading to cloud)
 Please use the link provided above for feature selection results
 
+Or use the files in Main/TS_RunFeatureSelection and Main/TM_RunFeatureSelection to perform feature selection.
 ## Scripts for analysing feature selection results
 Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`, `Main/TS_RunEvaluation` and `Main/Combine_Evaluation`.
 
