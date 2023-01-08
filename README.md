@@ -73,7 +73,7 @@ Other config
 
 
 ## Data sampling for different data characteristics 
-### Sampled datasets download link: (Uploading to cloud)
+### Sampled datasets procedure
 Please use the link provided above for full datasets sampled 
 Data characteristics were generated with the following three settings: varying number of cell types, varying number of cells, varying imbalacne ratio between major and minor cell types.
 
@@ -81,8 +81,7 @@ Please copy the downloaded folders to the `Data` folder as subfolders.
 
 Or use the files in `Data` folder to process, subsample and convert datasets.
 
-## Feature selection results
-### Download link: (Uploading to cloud)
+## Feature selection 
 Please use the link provided above for feature selection results
 
 Or use the files in `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection` to perform feature selection.
