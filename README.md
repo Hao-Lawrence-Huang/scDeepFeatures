@@ -79,7 +79,7 @@ Data characteristics were generated with the following three settings: varying n
 
 Please copy the downloaded folders to the `Data` folder as subfolders.
 
-OR use the files in `Data` folder to process, subsample and convert datasets.
+Or use the files in `Data` folder to process, subsample and convert datasets.
 
 ## Feature selection results
 ### Download link: (Uploading to cloud)
