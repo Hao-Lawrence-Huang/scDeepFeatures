@@ -73,7 +73,7 @@ Other config
 
 
 ## Data sampling for different data characteristics 
-### Sampled datasets procedure
+### Datasets subsampling procedure
 Scripts for processing, subsampling and converting datasets have beeen deposited in `Data` folder.
 
 ## Feature selection 
