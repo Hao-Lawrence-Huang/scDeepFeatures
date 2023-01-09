@@ -74,17 +74,10 @@ Other config
 
 ## Data sampling for different data characteristics 
 ### Sampled datasets procedure
-Please use the link provided above for full datasets sampled 
-Data characteristics were generated with the following three settings: varying number of cell types, varying number of cells, varying imbalacne ratio between major and minor cell types.
-
-Please copy the downloaded folders to the `Data` folder as subfolders.
-
-Or use the files in `Data` folder to process, subsample and convert datasets.
+Please use the files in `Data` folder to process, subsample and convert datasets.
 
 ## Feature selection 
-Please use the link provided above for feature selection results
-
-Or use the files in `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection` to perform feature selection.
+Please use the files in `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection` to perform feature selection.
 ## Scripts for analysing feature selection results
 Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`, `Main/TS_RunEvaluation` and `Main/Combine_Evaluation`.
 
