@@ -74,10 +74,10 @@ Other config
 
 ## Data sampling for different data characteristics 
 ### Sampled datasets procedure
-Please use the files in `Data` folder to process, subsample and convert datasets.
+Codes for processing, subsampling and converting datasets have beeen deposited in `Data` folder.
 
 ## Feature selection 
-Please use the files in `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection` to perform feature selection.
+Codes for feature selection have been deposited inin `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection`.
 ## Scripts for analysing feature selection results
 Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`, `Main/TS_RunEvaluation` and `Main/Combine_Evaluation`.
 
