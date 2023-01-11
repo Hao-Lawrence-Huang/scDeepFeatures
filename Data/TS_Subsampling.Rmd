@@ -27,7 +27,7 @@ sce=readRDS("./Processed/Tabula_sapiens/FS/sce_TS_FAC_processed_no_logcount.rds"
 sce$celltype = as.character(sce$cell_ontology_class)
 ```
 
-check the dimension with Lijia's paper
+check the dimension 
 56119 genes (removed all zero genes) * 27051 cells
 ```{r}
 nCellsinEachGroup=data.frame(table(sce$celltype))
