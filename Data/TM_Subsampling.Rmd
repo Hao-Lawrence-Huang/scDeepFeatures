@@ -27,7 +27,7 @@ sce=readRDS("./Processed/Tabula_muris/FS/sce_TM_FAC_processed_HH_no_logcount.rds
 sce$celltype = sce$cell_ontology_class
 ```
 
-check the dimension with Lijia's paper
+check the dimension 
 before filter: 23043 genes (removed all zero genes) * 44949 cells (removed 0)
 after filter: 23043 genes (removed all zero genes) * 39712 cells
 ```{r}
