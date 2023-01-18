@@ -77,7 +77,8 @@ Other config
 Scripts for processing, subsampling and converting datasets have beeen deposited in `Data` folder.
 
 ## Feature selection 
-Scripts for feature selection have been deposited inin `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection`.
+Scripts for feature selection have been deposited inin `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection`, and `Utils/Feature_selection_methods/Mlp/`.
+
 ## Scripts for analysing feature selection results
 Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`, `Main/TS_RunEvaluation` and `Main/Combine_Evaluation`.
 
