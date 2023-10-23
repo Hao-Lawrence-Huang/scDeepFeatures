@@ -1,4 +1,4 @@
-# Deep learning-based feature selection for single-cell RNA sequencing data analysis
+# scDeepFeatures: Deep learning-based feature selection for single-cell RNA sequencing data analysis
 
 In this work, we explore the utility of various deep learning-based feature selection methods for scRNA-seq data analysis. We sample from Tabula Muris and Tabula Sapiens atlases to create scRNA-seq datasets with a range of data properties and evaluate the performance of traditional and deep learning-based feature selection methods for cell type classification, feature selection reproducibility and diversity, and computational time. Our study provides a reference for future development and application of deep learning-based feature selection methods for single-cell omics data analyses.
 
@@ -11,14 +11,14 @@ DL feature selection for scRNA-seq is developed using PyTorch 1.11.0 and Captum 
 ### Installation using provided environment
 Step 1: Create and activate the conda environment for matilda using our provided file
 ```
-conda env create -f environment_DL_feature_selection.yml
+conda env create -f environment_DL_feature_selection.yaml
 conda activate fsdl
 ```
 
 Step 2:
 Obtain DL_feature_selection by clonning the github repository:
 ```
-git clone https://github.com/HaoHuang-USYD/DL_feature_selection.git
+git clone https://github.com/PYangLab/scDeepFeatures.git
 ```
 
 ## Preparing intput
@@ -72,13 +72,15 @@ Other config
 + `--augmentation`: Whether to augment simulated data.
 
 
-## Data sampling for different data characteristics 
-### Datasets subsampling procedure
-Scripts for processing, subsampling and converting datasets have beeen deposited in `Data` folder.
-
 ## Feature selection 
 Scripts for feature selection have been deposited in `Main/TM_RunFeatureSelection` and `Main/TS_RunFeatureSelection`, and `Utils/Feature_selection_methods/Mlp/`.
 
 ## Scripts for analysing feature selection results
 Scripts for analysing the feature selection results have been deposited in `Main/TM_RunEvaluation`, `Main/TS_RunEvaluation` and `Main/Combine_Evaluation`.
 
+## Citation
+If you use this content, please cite:
+```
+Hao Huang; Chunlei Liu; Manoj M Wagle; Pengyi Yang, Evaluation of deep learning-based feature selection for single-cell RNA sequencing data analysis. October 2023.
+```
+View our publication here: 
