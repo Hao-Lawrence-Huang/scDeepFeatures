@@ -84,4 +84,4 @@ If you use this content, please cite:
 Huang, H., Liu, C., Wagle, M.M. et al. Evaluation of deep learning-based feature selection for single-cell RNA sequencing data analysis. Genome Biol 24, 259 (2023). https://doi.org/10.1186/s13059-023-03100-x
 ```
 View our publication here: 
-https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-03100-x#citeas
+https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-03100-x
